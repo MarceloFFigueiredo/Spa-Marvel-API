@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang = "pt-br">
+
+	<head>
+		<title> Spa Marvel </title>
+
+		<link rel="stylesheet" type="text/css" href="main.css">
+		<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+
+		<style>
+			img {
+				width: 130px;
+				border-bottom-style: outset;
+				border-top-left-radius: 10px;
+				border-bottom-left-radius: 10px;
+			}
+
+			.personagem {
+				width: 130px;
+				margin: 10px;
+				border-style: outset;
+				border-radius: 10px;
+				text-align: center;
+			}
+
+			body {
+    		-webkit-animation: colorchange 60s infinite; 
+  			  animation: colorchange 60s infinite;
+			}
+			@-webkit-keyframes colorchange {
+				0%  {background: #c92d63;}
+				10%  {background: #8b3ab3;}
+				20%  {background: #4375c0;}
+				30%  {background: #43adc0;}
+				50%  {background: #239eae;}
+				60%  {background: #33dca9;}
+				70%  {background: #33dc33;}
+				80%  {background: #47dc33;}
+				90%  {background: #b7dc33;}
+				100% {background: #dfe154;}
+			}
+			@keyframes colorchange {
+				0%  {background: #c92d63;}
+				10%  {background: #8b3ab3;}
+				20%  {background: #4375c0;}
+				30%  {background: #43adc0;}
+				50%  {background: #239eae;}
+				60%  {background: #33dca9;}
+				70%  {background: #369e369e;}
+				80%  {background: #63c55696;}
+				90%  {background: #b7dc33;}
+				100% {background: #dfe154;}
+			}   
+			
+		</style>
+		
+	</head>	
+	
+	<body>
+		<div id = "banner">
+    	<img alt="Banner Marvel" width = "1500" height="100" src="Imagens/Banner.jpg">
+    	</div>
+
+		<div id = "titulo">
+			<h2>
+				Personagens ordenados de A à Z:
+			</h2>
+		</div>
+
+		<div id = 'herois'
+			style = "
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+			"
+		></div>
+		<footer>
+			By: Marcelo Feliciano Figueiredo.
+		</footer>
+
+		<script>
+			const timeStamp = "1622400946";//Time stamp feitam em um programa aleatorizador: "Java Script MD5 Demo".
+			const apikey = "de0264b11328a76d636f0bb9595045ff";//Chave da API recebida pelo site da Marvel developer.
+			const md5 = "fb194b405c2b4f771e9fbc94d6df60ff";//MD5 feito no MD5 demo.
+				
+			//fetch para estabelecer a "porta" entre a API e o código.
+			fetch(`https://gateway.marvel.com:443/v1/public/characters?ts=${timeStamp}&apikey=${apikey}&hash=${md5}&limit=90`
+			).then((response) => {
+				return response.json();
+			}).then((jsonParsed) => {
+				const divHero = document.querySelector('#herois');//Seleciona com o querySelector o id do objeto.
+				
+				jsonParsed.data.results.forEach(element => {
+					const srcImage = element.thumbnail.path + "." + element.thumbnail.extension//Construção do caminho da imagem.
+					const nameHero = element.name//Recebimento do nome do herói.
+
+					createDivHero(srcImage, nameHero, divHero);
+				});
+
+				console.log(jsonParsed);
+			})
+			
+			
+			function createDivHero(srcImage, nameHero, divHero) {//Função recebendo o endereço da imagem o nome do heroi e a div do heroi que irá crias divs e "colocar" elas umas dentro das outras.
+				const divPai = document.createElement('div')
+				const divFilho = document.createElement('div')
+				const textName = document.createElement('text')
+				const img = document.createElement('img')
+
+				textName.textContent = nameHero//Nome do herói recebido no forEach.
+				img.src = srcImage//Endereço da imagem reccebido no forEeach.
+
+				divFilho.appendChild(img)//Coloca a imagem dentro da divFilho com o appendChild.
+				divFilho.appendChild(textName)//Coloca o texto dentro da divFilho com o appendChild.
+				divPai.appendChild(divFilho)//Coloca a divFilho dentro da divPai com o appendChild.
+				divHero.appendChild(divPai)//Põe a divPai dentro da divHero com o appendChild.
+
+				divPai.classList.add("personagem");
+			}
+				
+		</script>
+
+	</body>
+
+	</html>
